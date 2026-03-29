@@ -1,0 +1,312 @@
+:root {
+  --paper: #f6f0e1;
+  --paper-deep: #eadfc5;
+  --ink: #2b2118;
+  --ink-soft: #625343;
+  --gold: #b48a45;
+  --gold-deep: #8b642e;
+  --wood: #5f3f27;
+  --wood-dark: #3c2818;
+  --card: rgba(255, 250, 240, 0.82);
+  --line: rgba(88, 63, 39, 0.16);
+  --shadow: 0 24px 80px rgba(53, 33, 14, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(circle at top left, rgba(255, 248, 223, 0.9), transparent 35%),
+    linear-gradient(135deg, #efe2bf 0%, #d7bd87 45%, #b88b4f 100%);
+}
+
+.app-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(58, 37, 19, 0.14), rgba(58, 37, 19, 0.14)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(105, 69, 39, 0.05) 0,
+      rgba(105, 69, 39, 0.05) 38px,
+      rgba(255, 245, 225, 0.06) 38px,
+      rgba(255, 245, 225, 0.06) 42px
+    );
+  pointer-events: none;
+}
+
+.library-page {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 64px;
+}
+
+.hero-card,
+.composer-card,
+.notes-panel,
+.login-card {
+  background: var(--card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.hero-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 36px;
+  border-radius: 28px;
+  margin-bottom: 28px;
+}
+
+.hero-card--login {
+  max-width: 760px;
+  margin: 40px auto 0;
+  display: block;
+}
+
+.hero-card h1 {
+  margin: 10px 0 12px;
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.hero-copy {
+  max-width: 620px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(133, 95, 37, 0.22);
+  background: rgba(255, 247, 230, 0.86);
+  color: var(--wood);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 28px;
+}
+
+.composer-card,
+.notes-panel,
+.login-card {
+  border-radius: 24px;
+  padding: 28px;
+}
+
+.login-card {
+  margin-top: 32px;
+  max-width: 420px;
+}
+
+.login-card h2,
+.section-heading h2 {
+  margin: 8px 0 20px;
+  font-size: 1.8rem;
+}
+
+.section-heading {
+  margin-bottom: 18px;
+}
+
+.library-input {
+  width: 100%;
+  border: 1px solid rgba(95, 63, 39, 0.2);
+  background: rgba(255, 251, 243, 0.96);
+  color: var(--ink);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  font: inherit;
+  font-size: 1rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.library-input:focus {
+  outline: none;
+  border-color: rgba(180, 138, 69, 0.9);
+  box-shadow: 0 0 0 4px rgba(180, 138, 69, 0.15);
+  transform: translateY(-1px);
+}
+
+.library-textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.library-button,
+.delete-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.library-button {
+  background: linear-gradient(135deg, var(--gold) 0%, #d8b269 100%);
+  color: #24180f;
+  box-shadow: 0 12px 30px rgba(127, 86, 31, 0.25);
+}
+
+.library-button:hover,
+.delete-button:hover {
+  transform: translateY(-2px);
+}
+
+.library-button--ghost {
+  background: rgba(255, 250, 240, 0.76);
+  color: var(--wood-dark);
+  border: 1px solid rgba(95, 63, 39, 0.18);
+  box-shadow: none;
+}
+
+.notes-list {
+  display: grid;
+  gap: 16px;
+}
+
+.note-card {
+  position: relative;
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(95, 63, 39, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 252, 246, 0.96), rgba(247, 238, 220, 0.94));
+}
+
+.note-card::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  bottom: 14px;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--gold), var(--wood));
+}
+
+.note-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-left: 14px;
+}
+
+.note-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.note-card p {
+  margin: 12px 0 0 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.delete-button {
+  background: rgba(92, 44, 27, 0.1);
+  color: #6d2f1e;
+}
+
+.empty-state {
+  padding: 28px;
+  border-radius: 22px;
+  border: 1px dashed rgba(95, 63, 39, 0.26);
+  text-align: center;
+  background: rgba(255, 252, 247, 0.8);
+}
+
+.empty-state p {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+}
+
+.empty-state span,
+.error-text {
+  color: var(--ink-soft);
+}
+
+.error-text {
+  margin: 8px 0 0;
+  color: #8a2d1f;
+}
+
+@media (max-width: 900px) {
+  .hero-card,
+  .content-grid {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .hero-actions {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .library-page {
+    width: min(100% - 20px, 1180px);
+    padding: 24px 0 40px;
+  }
+
+  .hero-card,
+  .composer-card,
+  .notes-panel,
+  .login-card {
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+  .note-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-card h1 {
+    font-size: 2.7rem;
+  }
+}
