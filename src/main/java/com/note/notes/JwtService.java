@@ -21,13 +21,7 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isValidToken(String authHeader) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return false;
-        }
-
-        String token = authHeader.substring(7);
-
+    public boolean isValidToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET.getBytes()))
