@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-
+const API_URL = "https://notes-app-f2vu.onrender.com";
 function App() {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState("");
@@ -13,7 +13,7 @@ function App() {
   const login = () => {
     setError("");
 
-    fetch("/api/auth/login", {
+    fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ function App() {
       return;
     }
 
-    fetch("/api/notes", {
+    fetch(`${API_URL}/notes`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -64,7 +64,7 @@ function App() {
   }, [token]);
 
   const addNote = () => {
-    fetch("/api/notes", {
+    fetch(`${API_URL}/notes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +88,7 @@ function App() {
   };
 
   const deleteNote = (id) => {
-    fetch(`/api/notes/${id}`, {
+    fetch(`${API_URL}/notes/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -99,7 +99,9 @@ function App() {
           throw new Error("Unable to delete note");
         }
 
-        setNotes((currentNotes) => currentNotes.filter((note) => note.id !== id));
+        setNotes((currentNotes) =>
+          currentNotes.filter((note) => note.id !== id),
+        );
       })
       .catch((err) => console.error(err));
   };
@@ -173,7 +175,10 @@ function App() {
 
           <div className="hero-actions">
             <span className="status-pill">{notes.length} archived notes</span>
-            <button className="library-button library-button--ghost" onClick={logout}>
+            <button
+              className="library-button library-button--ghost"
+              onClick={logout}
+            >
               Logout
             </button>
           </div>
@@ -215,7 +220,9 @@ function App() {
               {notes.length === 0 ? (
                 <div className="empty-state">
                   <p>No notes shelved yet.</p>
-                  <span>Write your first entry to begin your personal library.</span>
+                  <span>
+                    Write your first entry to begin your personal library.
+                  </span>
                 </div>
               ) : (
                 notes.map((note) => (
