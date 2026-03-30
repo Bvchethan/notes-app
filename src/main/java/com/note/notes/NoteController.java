@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/notes", "/api/notes"})
+@RequestMapping({ "/notes", "/api/notes" })
 @CrossOrigin
 public class NoteController {
 
@@ -39,8 +39,15 @@ public class NoteController {
     }
 
     private void authorize(String token) {
-        if (!jwtService.isValidToken(token)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing token");
+        if (token == null || !token.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing token");
         }
+
+        String actualToken = token.substring(7);
+
+        if (!jwtService.isValidToken(actualToken)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
+        }
+
     }
 }
