@@ -43,11 +43,10 @@ public class NoteController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing token");
         }
 
-        String actualToken = token.substring(7);
+        String actualToken = token.substring(7); // remove "Bearer "
 
         if (!jwtService.isValidToken(actualToken)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
         }
-
     }
 }
