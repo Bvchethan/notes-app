@@ -83,8 +83,3 @@ Deployment
 *  Mobile responsiveness
 Author
 Built by **Chethan** 
-
-
-## ⭐ Show your support
-
-If you like this project, give it a ⭐ on GitHub!
