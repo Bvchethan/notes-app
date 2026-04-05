@@ -20,25 +20,28 @@ public class NoteController {
 
     @GetMapping
     public List<Note> getAll(@RequestHeader("Authorization") String token) {
-        authorize(token);
-        return repo.findAll();
+        String username = authorize(token);
+        return repo.findAllByOwnerUsernameOrderByIdDesc(username);
     }
 
     @PostMapping
     public Note add(@RequestBody Note note,
             @RequestHeader("Authorization") String token) {
-        authorize(token);
+        String username = authorize(token);
+        note.setOwnerUsername(username);
         return repo.save(note);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        authorize(token);
-        repo.deleteById(id);
+        String username = authorize(token);
+        Note note = repo.findByIdAndOwnerUsername(id, username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Note not found"));
+        repo.delete(note);
     }
 
-    private void authorize(String token) {
+    private String authorize(String token) {
         if (token == null || !token.startsWith("Bearer ")) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing token");
         }
@@ -48,5 +51,7 @@ public class NoteController {
         if (!jwtService.isValidToken(actualToken)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
         }
+
+        return jwtService.extractUsername(actualToken);
     }
 }

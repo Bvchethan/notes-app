@@ -11,6 +11,7 @@ public class Note {
 
     private String title;
     private String content;
+    private String ownerUsername;
 
     public Long getId() {
         return id;
@@ -34,5 +35,13 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getOwnerUsername() {
+        return ownerUsername;
+    }
+
+    public void setOwnerUsername(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
     }
 }

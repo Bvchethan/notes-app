@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-const API_URL = "https://notes-app-f2vu.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "";
 function App() {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [authMode, setAuthMode] = useState("login");
   const [error, setError] = useState("");
 
-  const login = () => {
+  const submitAuth = (path, invalidMessage) => {
     setError("");
 
-    fetch(`${API_URL}/auth/login`, {
+    fetch(`${API_URL}/auth/${path}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,17 +25,36 @@ function App() {
       .then(async (res) => {
         const data = await res.text();
 
-        if (!res.ok || data === "Invalid credentials") {
-          throw new Error("Invalid username or password");
+        if (!res.ok) {
+          throw new Error(data || invalidMessage);
         }
 
         localStorage.setItem("token", data);
         setToken(data);
+        setConfirmPassword("");
       })
       .catch((err) => {
         setError(err.message);
         console.error(err);
       });
+  };
+
+  const login = () => {
+    submitAuth("login", "Invalid username or password");
+  };
+
+  const register = () => {
+    if (!username.trim() || !password.trim()) {
+      setError("Username and password are required");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    submitAuth("register", "Unable to register");
   };
 
   useEffect(() => {
@@ -114,7 +135,9 @@ function App() {
     setContent("");
     setUsername("");
     setPassword("");
+    setConfirmPassword("");
     setError("");
+    setAuthMode("login");
   };
 
   if (!token) {
@@ -145,9 +168,36 @@ function App() {
             </div>
 
             <div className="auth-card">
+              <div className="auth-switch">
+                <button
+                  className={`auth-switch__button ${
+                    authMode === "login" ? "auth-switch__button--active" : ""
+                  }`}
+                  onClick={() => {
+                    setAuthMode("login");
+                    setError("");
+                  }}
+                >
+                  Login
+                </button>
+                <button
+                  className={`auth-switch__button ${
+                    authMode === "register" ? "auth-switch__button--active" : ""
+                  }`}
+                  onClick={() => {
+                    setAuthMode("register");
+                    setError("");
+                  }}
+                >
+                  Register
+                </button>
+              </div>
+
               <div className="section-heading">
-                <p className="eyebrow">Welcome Back</p>
-                <h2>Login</h2>
+                <p className="eyebrow">
+                  {authMode === "login" ? "Welcome Back" : "Create Account"}
+                </p>
+                <h2>{authMode === "login" ? "Login" : "Register"}</h2>
               </div>
 
               <input
@@ -165,8 +215,21 @@ function App() {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              <button className="library-button" onClick={login}>
-                Sign In
+              {authMode === "register" ? (
+                <input
+                  className="library-input"
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              ) : null}
+
+              <button
+                className="library-button"
+                onClick={authMode === "login" ? login : register}
+              >
+                {authMode === "login" ? "Sign In" : "Create Account"}
               </button>
               {error ? <p className="error-text">{error}</p> : null}
             </div>
@@ -205,8 +268,12 @@ function App() {
         <section className="summary-grid">
           <article className="summary-card">
             <span className="metric-label">Total Notes</span>
-            <strong>{notes.length}</strong>
-            <p>Your personal note collection, ready anytime.</p>
+
+            <strong>
+              <h1>{notes.length}</h1>
+            </strong>
+
+            <p></p>
           </article>
           <article className="summary-card">
             <span className="metric-label">Workspace</span>

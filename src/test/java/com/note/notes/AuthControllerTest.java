@@ -34,4 +34,26 @@ class AuthControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string("Invalid credentials"));
     }
+
+    @Test
+    void registerCreatesANewUserAndReturnsToken() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"new-user\",\"password\":\"secret\"}"))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void registerRejectsDuplicateUsernames() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"repeat-user\",\"password\":\"secret\"}"))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"repeat-user\",\"password\":\"secret\"}"))
+                .andExpect(status().isConflict())
+                .andExpect(content().string("Username already exists"));
+    }
 }

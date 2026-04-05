@@ -15,8 +15,18 @@ describe("App", () => {
     render(<App />);
 
     expect(screen.getByText("Login")).toBeInTheDocument();
+    expect(screen.getByText("Register")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();
+  });
+
+  test("shows confirm password when switching to register", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByText("Register"));
+
+    expect(screen.getByPlaceholderText("Confirm Password")).toBeInTheDocument();
+    expect(screen.getByText("Create Account")).toBeInTheDocument();
   });
 
   test("logs out and returns to login screen", async () => {
